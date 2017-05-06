@@ -9,6 +9,9 @@ public class Spawner : MonoBehaviour {
 	private double  	spawnTimer = 0;
 	public  float 		spawnRangeMin = 0f;
 
+	public float spawnInitialForce = 100f;
+	public float spawnInitialTorque = 100f;
+
 	private SphereCollider spawnerSphere; 	// Must be attached to this object
 
 	public void Start () {
@@ -26,7 +29,8 @@ public class Spawner : MonoBehaviour {
 	public void Spawn (GameObject obj) {
 		Vector3 spawnPosition = transform.position + spawnerSphere.center + GetRandomPointInCircleRange (spawnRangeMin, spawnerSphere.radius);
 		GameObject instance = Instantiate (obj, spawnPosition, Random.rotation);
-		instance.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * 100);
+		instance.GetComponent<Rigidbody> ().AddRelativeForce  (Vector3.forward * spawnInitialForce);
+		instance.GetComponent<Rigidbody> ().AddRelativeTorque (new Vector3(Random.value, Random.value, Random.value) * spawnInitialTorque);
 	}
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {

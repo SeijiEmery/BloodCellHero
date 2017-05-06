@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour {
 	public void Spawn (GameObject enemy) {
 		Vector3 spawnPosition = transform.position + spawnerSphere.center + Random.insideUnitSphere * spawnerSphere.radius;
 		GameObject instance = Instantiate (enemy, spawnPosition, transform.rotation);
-		instance.GetComponent<Enemy>().SetTarget (player.transform);
+//		instance.GetComponent<Enemy>().SetTarget (player.transform);
 	}
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {

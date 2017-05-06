@@ -1,8 +1,6 @@
 Todo:
-– Projectile / Enemy collision not generating OnCollisionEnter events; should be destroyed on hit but aren't (see Projectile.cs)
-– Projectiles not moving towards player; should be able to start initial motion with AddForce, but not working.
 – Player can move with directional keys; probably fine but might want to disable this. Just using a FPS character with gravity disabled atm.
-– Enemies should probably be attached to things that move, not move themselves
+– Enemies should probably be attached to things that move, not move themselves (working on this)
 – All non-trivial mechanics
 
 Progress so far:

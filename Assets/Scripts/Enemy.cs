@@ -13,10 +13,6 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void SetTarget (Transform target) {
-		GetComponent<Rigidbody> ().AddForce((target.position - transform.position).normalized * movementSpeed);
-	}
-
 	// Update is called once per frame
 	void Update () {
 

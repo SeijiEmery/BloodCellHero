@@ -8,9 +8,15 @@ public class Enemy : MonoBehaviour {
 
 	public void OnTriggerEnter (Collider other) {
 		if (other.gameObject.CompareTag ("Projectile")) {
-			Destroy (this.gameObject);
-			Destroy (other.gameObject);
+			DeleteRecursive (this.transform);
+			DeleteRecursive (other.transform);
 		}
+	}
+	static void DeleteRecursive (Transform obj) {
+		while (obj.parent) {
+			obj = obj.parent;
+		}
+		Destroy(obj.gameObject);
 	}
 
 	// Update is called once per frame

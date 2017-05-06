@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-	public float movementSpeed = 100000.0f;
-
 	public void OnTriggerEnter (Collider other) {
 		if (other.gameObject.CompareTag ("Projectile")) {
 			DeleteRecursive (this.transform);

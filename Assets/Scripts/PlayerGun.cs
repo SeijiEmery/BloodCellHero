@@ -13,6 +13,9 @@ public class PlayerGun : MonoBehaviour {
 	// Fires a projectile from this gun transform.
 	// If cannot currently fire, queues a fire action.
 	public void Fire () {
+//		if (!MaybeFire ()) {
+//			queuedProjectiles += 1;
+//		}
 		MaybeFire ();
 	}
 	private bool MaybeFire () {

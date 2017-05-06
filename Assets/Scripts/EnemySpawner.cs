@@ -18,7 +18,8 @@ public class EnemySpawner : MonoBehaviour {
 	// Spawns an enemy within this spawner's spawn radius.
 	public void Spawn (GameObject enemy) {
 		Vector3 spawnPosition = transform.position + spawnerSphere.center + Random.insideUnitSphere * spawnerSphere.radius;
-		GameObject instance = Instantiate (enemy, spawnPosition, transform.rotation);
+		GameObject instance = Instantiate (enemy, spawnPosition, Random.rotation);
+		instance.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * 100);
 	}
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {

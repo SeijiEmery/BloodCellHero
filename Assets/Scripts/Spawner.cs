@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
 
-	public GameObject 	spawnable;
-	public double   	spawnFrequency = 1.0; // spawns per second
+	public GameObject 	spawnable; 							// thing to spawn; must have rigidbody
+	public double   	spawnFrequency = 1.0; 				// spawns per second
+
+	public float        spawnVelocity  = 10.0f; 			// scaled by mass
+	public float        spawnVelocityRandomFactor = 0.0f; 	// scaled by mass
+	public float        spawnTorqueRandomFactor = 1.0f; 	// scaled by mass
+
+	public  float 		spawnRangeMin = 0f; 				// min range (max range = sphere collider radius)
+
 	private double  	spawnTimer = 0;
-	public  float 		spawnRangeMin = 0f;
-
-	public float spawnInitialForce = 100f;
-	public float spawnInitialTorque = 100f;
-
 	private SphereCollider spawnerSphere; 	// Must be attached to this object
 
 	public void Start () {
@@ -28,9 +30,15 @@ public class Spawner : MonoBehaviour {
 	// Spawns an object within this spawner's spawn radius.
 	public void Spawn (GameObject obj) {
 		Vector3 spawnPosition = transform.position + spawnerSphere.center + GetRandomPointInCircleRange (spawnRangeMin, spawnerSphere.radius);
-		GameObject instance = Instantiate (obj, spawnPosition, Random.rotation);
-		instance.GetComponent<Rigidbody> ().AddRelativeForce  (Vector3.forward * spawnInitialForce);
-		instance.GetComponent<Rigidbody> ().AddRelativeTorque (new Vector3(Random.value, Random.value, Random.value) * spawnInitialTorque);
+		GameObject instance   = Instantiate (obj, spawnPosition, Random.rotation);
+	
+		Rigidbody rb = instance.GetComponent<Rigidbody> ();
+
+		Vector3 v0 = Vector3.back * spawnVelocity + new Vector3 (Random.value, Random.value, Random.value) * spawnVelocityRandomFactor;
+		Vector3 t0 = new Vector3 (Random.value, Random.value, Random.value) * spawnTorqueRandomFactor;
+
+		rb.AddForce(v0, ForceMode.VelocityChange);
+		rb.AddTorque (t0 * rb.mass);
 	}
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public class RedBloodCell : MonoBehaviour {
+[CustomEditor(typeof(Spawner))]
+public class SpawnerEditor : Editor {
 
 	// Use this for initialization
 	void Start () {

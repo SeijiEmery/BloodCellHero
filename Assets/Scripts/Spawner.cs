@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour {
-	class SpawnDescriptor {
-		public Spawnable 	spawnable;
-		public double 		minRange = 2;
-		public double 		maxRange = 10;
-		public double 		frequency = 1.0;
-		public double 		lifetime  = 10;
-		public double       velocity  = 10;
-		public double       randomVelocity = 0.1;
-		public double       randomTorque   = 0.1;
-	}
-	SpawnDescriptor[] 		descriptors;
+//	class SpawnDescriptor {
+//		public Spawnable 	spawnable;
+//		public double 		minRange = 2;
+//		public double 		maxRange = 10;
+//		public double 		frequency = 1.0;
+//		public double 		lifetime  = 10;
+//		public double       velocity  = 10;
+//		public double       randomVelocity = 0.1;
+//		public double       randomTorque   = 0.1;
+//	}
+//	SpawnDescriptor[] 		descriptors;
 
 	public GameObject 	spawnable; 							// thing to spawn; must have rigidbody
 	public double   	spawnFrequency = 1.0; 				// spawns per second

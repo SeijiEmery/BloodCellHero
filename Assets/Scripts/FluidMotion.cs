@@ -8,6 +8,6 @@ public class FluidMotion : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		GetComponent<Rigidbody>().AddForce (Vector3.back * force * Time.deltaTime);
+//		GetComponent<Rigidbody>().AddForce (Vector3.back * force * Time.deltaTime);
 	}
 }

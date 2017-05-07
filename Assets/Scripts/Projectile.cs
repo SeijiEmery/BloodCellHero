@@ -3,24 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
-
-//	void OnCollisionEnter (Collision collision) {
-//		Debug.Log ("Collision!");
-//		if (collision.gameObject.CompareTag ("Enemy")) {
-//			Debug.Log ("Death!");
-//			// Kill self, other. Todo: more complex interactions.
-//			Destroy(collision.gameObject);
-//			Destroy (this.gameObject);
-//		}
-//	}
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void OnCollisionEnter (Collision collision) {
+		Enemy enemy = collision.gameObject.GetComponent<Enemy> ();
+		if (enemy != null) {
+			GameManager.Instance.UpdateScore(enemy.scoreValue);
+			enemy.PlayDeathAnimation ();
+			Destroy(this.gameObject);
+		}
 	}
 }

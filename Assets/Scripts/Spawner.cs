@@ -38,7 +38,7 @@ public class Spawner : MonoBehaviour {
 		Vector3 t0 = new Vector3 (Random.value, Random.value, Random.value) * spawnTorqueRandomFactor;
 
 		rb.AddForce(v0, ForceMode.VelocityChange);
-		rb.AddTorque (t0 * rb.mass);
+		rb.AddTorque (t0, ForceMode.VelocityChange);
 	}
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {

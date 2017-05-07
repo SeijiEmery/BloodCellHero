@@ -13,10 +13,9 @@ public class LinearRepositioner : MonoBehaviour {
 	void Update () {
 		// Issue / limitation: operations done relative to origin
 //		float truncOffset = (float)(segmentLength * numSegments);
-		double zcoord = (double)transform.position.z + velocity * Time.deltaTime;
-		double z1     = zcoord - segmentLength * numSegments;
-		Debug.Log (z1);
-		transform.position = new Vector3 (transform.position.x, transform.position.y, z1 < 0 ? (float)zcoord : (float)z1);
+		double zcoord = (double)transform.position.z - velocity * Time.deltaTime;
+		double z1     = zcoord + segmentLength * numSegments;
+		transform.position = new Vector3 (transform.position.x, transform.position.y, z1 > 0 ? (float)zcoord : (float)z1);
 //		if ((transform.position.z -= velocity * Time.deltaTime) >= truncOffset) {
 //			transform.position.z += truncOffset;
 //		}

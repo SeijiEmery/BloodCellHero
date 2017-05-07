@@ -17,9 +17,7 @@ public class SceneManagerA : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if ((float)(Time.time - sceneStartTime) > (waitTimeSeconds)) {
-			Debug.Log ("GOT THERE");
 			SceneManager.LoadScene (nextSceneToLoadStr);
-			Debug.Log (nextSceneToLoadStr);
 		}
 		Debug.Log (sceneStartTime);
 	}

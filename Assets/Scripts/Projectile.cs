@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour {
 		Enemy enemy = collision.gameObject.GetComponent<Enemy> ();
 		if (enemy != null) {
 			GameManager.Instance.UpdateScore(enemy.scoreValue);
-			Destroy(collision.gameObject);
+			enemy.PlayDeathAnimation ();
 			Destroy(this.gameObject);
 		}
 	}

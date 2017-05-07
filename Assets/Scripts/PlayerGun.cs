@@ -23,6 +23,8 @@ public class PlayerGun : MonoBehaviour {
 			GameObject instance = Instantiate (projectile, transform.position, transform.rotation);
 			instance.GetComponent<Rigidbody> ().AddForce (transform.rotation * Vector3.forward * fireVelocity, ForceMode.VelocityChange); 
 			fireTimer = fireDelay;
+
+			GetComponent<AudioSource> ().Play ();
 			return true;
 		}
 		return false;
@@ -31,8 +33,8 @@ public class PlayerGun : MonoBehaviour {
 		fireTimer -= Time.deltaTime;
 
 		// Should we queue projectiles?
-		if (queuedProjectiles > 0 && MaybeFire()) {
-			queuedProjectiles -= 1;
-		}
+//		if (queuedProjectiles > 0 && MaybeFire()) {
+//			queuedProjectiles -= 1;
+//		}
 	}
 }

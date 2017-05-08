@@ -2,6 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Contains systems to manage scores, level timers, etc.
+// Only partially implemented.
+//
+// Note: has some super-crappy code (time-related stuff; constructing time with
+// getMinutes() / getSeconds() is just _wrong_); in my defense, this was added in the 
+// last ~1 hour of the game jam, when we desperately needed to finish UI
+//
+// (plan was to have points (accumulated by killing cancer cells) + level timer
+// (fixed time to kill cancer cells in) that ticks down visually, in VR / desktop.
+// Technically we succeeded, but the level doesn't end...).
+//
 public class GameManager : MonoBehaviour {
 
 	public uint levelDuration_minutes = 2;
@@ -64,9 +75,6 @@ public class GameManager : MonoBehaviour {
 			OnLevelEnded ();
 		}
 		Debug.Log ("Time remaining: " + minutesRemaining + ":" + secondsRemaining);
-
-//		Debug.Log (GameManager.Instance.Score);
-//		Debug.Log ("Score");
 	}
 
 	public void UpdateScore(int ScoreIncrement) {

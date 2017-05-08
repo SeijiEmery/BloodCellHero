@@ -1,9 +1,0 @@
-Todo:
-– Player can move with directional keys; probably fine but might want to disable this. Just using a FPS character with gravity disabled atm.
-– Enemies should probably be attached to things that move, not move themselves (working on this)
-– All non-trivial mechanics
-
-Progress so far:
-– EnemySpawner spawns enemies within circle at fixed intervals; should add more complex controller system later
-– PlayerGun has a Fire() method that spawns projectiles
-– All motion done (so far) with rigidbodies

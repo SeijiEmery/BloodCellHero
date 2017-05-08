@@ -4,6 +4,9 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 
+// adapted FirstPerson character controller.
+// We don't have movement, so all movement-related code has been commented out (but can be re-enabled).
+// Gamepad support was added in a hack-ish way (uses input axes RHorizontal, RVertical); see MouseLook.cs.
 namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]

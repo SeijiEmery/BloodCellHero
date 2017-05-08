@@ -2,47 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Centralized controller for level behavior
-// Note: reimplements spawner behavior (intentional).
+// Centralized controller for level behavior; replaces spawner and reimplements its features.
+// This is a super-hacky class that was added at the last minute to enable whole-scene animation
+// (representing scene properties over time in an animation curve; made possible by exposing lots
+//  of stuff in this single class).
+// 
+// This is an alternative / replacement for 2 spawner objects (RBC + CBC).
+// Was not used in the final build, though there *is* a deactivated instance in MainScene, and 
+// ScalingScene was constructed specifically to test this. 
+//
+// To use, replace the spawner scripts, and bind all fields (we could do this automatically in 
+// Start(), but eh).
+//
 public class ProceduralLevelController : MonoBehaviour {
 	public Transform 	spawnCenter;				// external transform
 	public Transform 	levelRoot; 					// for scale
 	public Player 		player; 					// may need this
 	public PlayerGun    playerGun;
-	public float     	levelRootInitialRadius; 	// initial radius of tunnel in level root
+	public float     	levelRootInitialRadius; 	// base tunnel width / radius;
 
+	// Prefabs
 	public GameObject 	rbcPrefab;
 	public GameObject 	cbcPrefab;
 
+	// Controls player fire rate on PlayerGun object; detects changes via cached playerPrevFireRate
 	public float 		PLAYER_FIRE_RATE = 1.0f;	// num shots / sec
 	private float 		playerPrevFireRate = 0f;
 
+	// Red blood cell / cancer blood cell spawn rates (objects / sec)
 	public float 		RBC_SPAWN_RATE = 10.0f;
 	public float 		CBC_SPAWN_RATE = 10.0f;
 
-	public float 		RBC_SCALE  		= 1.0f;
+	// Cell scaling; not fully implemented.
+	// Script behavior is fine, but red / cancer cell prefabs need to have a parent empty object
+	// for this to work; setting scale directly will not work b/c this is also set by animations.
+	public float 		RBC_SCALE  	  = 1.0f;
 	public float 		CBC_SCALE     = 1.0f;
 
+	// Re-scales root tunnel / vein object (assumes initial scale is 1), and that can accomodate arbitrary scaling.
+	// Also adjusts spawn radius to compensate.
 	public float 		TUNNEL_SCALE = 1f;
 	private float 		tunnelPrevScale = 0f;
 
+	// Bounds for inner / outer spawn rings for RBC / CBC.
+	// These are normalized values: 
+	//  	INNER_RADIUS = 0 => no hole in center
+	//		INNER_RADIUS = 0.5 => hole 1/2 radius in center
+	// 		OUTER_RADIUS = 0.5 => max extent is 1/2 of radius
+	//		OUTER_RADIUS = 1.0 => max extent is full radius
+	// where radius = levelRootInitialRadius * levelRoot.localScale.x (.x chosen arbitrarily)
+	//
 	public float 		RBC_INNER_SPAWN_RADIUS = 0.4f;
 	public float 		CBC_INNER_SPAWN_RADIUS = 0.2f;
 
 	public float 		RBC_OUTER_SPAWN_RADIUS = 0.8f;
 	public float 		CBC_OUTER_SPAWN_RADIUS = 0.8f;
 
+	// Sets initial velocity (z)
 	public float 		RBC_VELOCITY = 15f;
 	public float 		CBC_VELOCITY = 10f;
 
+	// Sets max initial drift value (xyz each have values in [0, DRIFT_VEL])
 	public float 		DRIFT_VEL    = 0.1f;
 
+	// Sets angular velocity bounds (random value in [MIN, MAX])
 	public float 		MAX_ANGULAR_VEL = 45f;
 	public float 		MIN_ANGULAR_VEL = 0f;
 
+	// Set object lifetime directly (assumes RBC, CBC prefabs have SelfDestruct.cs attached at root level)
 	public float 		RBC_LIFETIME = 10.0f;
 	public float 		CBC_LIFETIME = 10.0f;
 
+	// Internal timer values
 	private float 		rbcSpawnTimer = 0f;
 	private float 		cbcSpawnTimer = 0f;
 
@@ -70,17 +101,20 @@ public class ProceduralLevelController : MonoBehaviour {
 		instance.GetComponent<SelfDestruct> ().destructTime = lifetime;
 	}
 	public void Update () {
-		playerGun.fireDelay = 1f / PLAYER_FIRE_RATE;
-
+		
+		// When PLAYER_FIRE_RATE changes, set player.fireDelay
 		if (PLAYER_FIRE_RATE != playerPrevFireRate) {
 			playerPrevFireRate = PLAYER_FIRE_RATE;
 			playerGun.fireDelay = 1f / PLAYER_FIRE_RATE;
 		}
+
+		// when TUNNEL_SCALE changes, set levelRoot.localScale (rescales all vein objects under levelRoot)
 		if (TUNNEL_SCALE != tunnelPrevScale) {
 			tunnelPrevScale = TUNNEL_SCALE;
 			levelRoot.localScale = new Vector3 (TUNNEL_SCALE, TUNNEL_SCALE, TUNNEL_SCALE);
 		}
 
+		// Conditionally spawn red / cancer cells
 		float radius = levelRootInitialRadius * levelRoot.localScale.x;
 		if ((rbcSpawnTimer -= Time.deltaTime) < 0f) {
 			rbcSpawnTimer = 1f / RBC_SPAWN_RATE;

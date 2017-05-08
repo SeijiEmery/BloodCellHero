@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Implements spawner behavior used to instantiate red / cancer cells.
+// Has controls for spawn frequency, initial velocity (z), random velocity (xyz), 
+// random angular velocity / torque, and object lifetime.
+//
+// Spawns evenly distributed objects in a ring, with:
+//	– outer radius defined by radius of attached spherecollider (disabled; used only as visual marker)
+//  – inner radius defined by spawnRangeMin
+//
+// This is important / useful, since:
+//	– ring radius can match, or be slightly less than, diameter of veins / tubes (circular)
+// 	- it's important that objects not get spawned right in front of the player (hits camera / chaotic).
+//    objects *might* drift there ofc, which is considered acceptable.
+//
+// Note that all public fields are animabable; it was my original intention to define level behavior
+// over time using these + animation curves, but due to time constriants, this didn't really get implemented.
+// See also: ProceduralLevelController.cs
+//
 public class Spawner : MonoBehaviour {
-//	class SpawnDescriptor {
-//		public Spawnable 	spawnable;
-//		public double 		minRange = 2;
-//		public double 		maxRange = 10;
-//		public double 		frequency = 1.0;
-//		public double 		lifetime  = 10;
-//		public double       velocity  = 10;
-//		public double       randomVelocity = 0.1;
-//		public double       randomTorque   = 0.1;
-//	}
-//	SpawnDescriptor[] 		descriptors;
-
+	
 	public GameObject 	spawnable; 							// thing to spawn; must have rigidbody
 	public double   	spawnFrequency = 1.0; 				// spawns per second
 
@@ -32,6 +38,7 @@ public class Spawner : MonoBehaviour {
 		spawnerSphere = GetComponent<SphereCollider> ();
 	}
 
+	// utility method
 	private static Vector3 GetRandomPointInCircleRange (float rMin, float rMax) {
 		// Adapted http://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly
 		float t = Random.value * 360f;
@@ -39,6 +46,7 @@ public class Spawner : MonoBehaviour {
 		float r = (rMax - rMin) * (u > 1f ? 2 - u : u) + rMin;
 		return new Vector3 (r * Mathf.Cos (t), r * Mathf.Sin (t), 0f);
 	}
+
 	// Spawns an object within this spawner's spawn radius.
 	public void Spawn (GameObject obj) {
 		Vector3 spawnPosition = transform.position + spawnerSphere.center + GetRandomPointInCircleRange (spawnRangeMin, spawnerSphere.radius);
@@ -51,7 +59,10 @@ public class Spawner : MonoBehaviour {
 
 		rb.AddForce(v0, ForceMode.VelocityChange);
 		rb.AddTorque (t0, ForceMode.VelocityChange);
+
+		instance.GetComponent<SelfDestruct> ().destructTime = spawnLifetime;
 	}
+
 	public void Update () {
 		if ((spawnTimer -= Time.deltaTime) < 0.0) {
 			spawnTimer = 1f / spawnFrequency;
